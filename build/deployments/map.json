@@ -1,6 +1,13 @@
 {
+  "4": {
+    "CLendingManager": [
+      "0xFEbe82a354115423dB2eC66a94B7a2514a461aFC"
+    ]
+  },
   "5777": {
     "CLendingManager": [
+      "0x766BD59A4eAA0EECCC30e82380E8E12c986bb2DA",
+      "0xf14a680421C748Ea64226E4d3bA4fB939c0DddFD",
       "0x771922cbDC7C4d354ebfBF2fDB9eA0045ae03C95",
       "0x1F829318F2B72A0B9dCF16A2d51827AFcd27539b"
     ]
