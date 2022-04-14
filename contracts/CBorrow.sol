@@ -24,17 +24,18 @@ contract CBorrow is Ownable{
     bytes32[] private all_ids;
 
     mapping(address => uint) private borrower_confirmed_amount;
-    
 
-    // Function to get the current count
-    function applyForCredit(address borrower, uint256 amount) external {
-         bytes32 id = keccak256(abi.encode(borrower, borrower, block.timestamp));
-         borrower_application[id] = Credit(id, borrower, amount, false, block.timestamp, 3);
-         all_borrowers.push(borrower);
-         all_ids.push(id);
-         applications_count++;
+
+
+    function applyForCredit(address payable applicant, uint256 amount, uint duration_in_month) external  {
+        require ((address(this).balance > amount), "Not enough balance");
+        bytes32 id = keccak256(abi.encode(msg.sender, block.timestamp));
+        borrower_application[id] = Credit(id, msg.sender, amount, true, block.timestamp, duration_in_month);
+        applicant.transfer(amount);
+        all_borrowers.push(msg.sender);
+        all_ids.push(id);
+        applications_count++;
     }
-
 
     function getApplications() external onlyOwner view returns (Credit[] memory)  {
         Credit[] memory c_list = new Credit[](applications_count);

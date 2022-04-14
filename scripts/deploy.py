@@ -2,17 +2,10 @@ from brownie import CLendingManager, accounts, network, config
 from web3 import Web3
 import shutil
 
-LOCAL_BLOCKCHAIN_ENVIRONMENTS = ["ganache-local"]
+LOCAL_BLOCKCHAIN_ENVIRONMENTS = ["ganache-local", "development"]
 
 
-def getOwnerAccount():
-    if network.show_active() in LOCAL_BLOCKCHAIN_ENVIRONMENTS:
-        return accounts[0]
-    else:
-        return accounts.add(config["wallets"]["from_key"])
-
-
-def getBorrowerAccount(id):
+def getAccount(id):
     if network.show_active() in LOCAL_BLOCKCHAIN_ENVIRONMENTS:
         return accounts[id]
     else:
@@ -20,7 +13,9 @@ def getBorrowerAccount(id):
 
 
 def deploy_all(account):
+
     CLendingManager.deploy({"from": account})
+
     shutil.copyfile(
         "/Users/machhammer/Projekte/CLending/backend/build/deployments/map.json",
         "/Users/machhammer/Projekte/CLending/frontend/src/components/json/map.json",
@@ -32,12 +27,32 @@ def deploy_all(account):
 
 
 def main():
-    owner_account = getOwnerAccount()
-    borrower_account = getBorrowerAccount(2)
-    deposit_account = getBorrowerAccount(3)
+    owner_account = getAccount(0)
+    account1 = getAccount(1)
+    account2 = getAccount(2)
+    account3 = getAccount(3)
+    account4 = getAccount(4)
+    account5 = getAccount(5)
 
     deploy_all(owner_account)
     cm = CLendingManager[-1]
-    print(cm)
-    cm.depositAmount({"from": deposit_account, "value": Web3.toWei(1, "ether")})
-    print(cm.getDepositBalance())
+ 
+    cm.addDeposit(3, {"from": account1, "value": Web3.toWei(0.01, "ether")})
+    cm.addDeposit(3, {"from": account2, "value": Web3.toWei(0.02, "ether")})
+    cm.addDeposit(3, {"from": account1, "value": Web3.toWei(0.03, "ether")})
+    cm.addDeposit(3, {"from": account3, "value": Web3.toWei(0.04, "ether")})
+    
+    print(account1)
+    print(account2)
+    print(account3)
+    
+    print("*********************************************************")
+
+    addresses = cm.getDepositAddresses()
+    print(addresses)
+
+    for a in addresses:
+        print("Address: ", a)
+        print(cm.getDepositbyAddress(a))
+
+  

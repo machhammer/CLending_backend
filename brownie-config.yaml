@@ -4,11 +4,12 @@ dependencies:
 compiler:
   solc:
     remappings:
-      - '@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.2.0'
-      - '@chainlink=smartcontractkit/chainlink-brownie-contracts@0.2.1'
+      - "@openzeppelin=OpenZeppelin/openzeppelin-contracts@4.2.0"
+      - "@chainlink=smartcontractkit/chainlink-brownie-contracts@0.2.1"
 dotenv: .env
 dev_deployment_artifacts: True
 networks:
+  default: development
   development:
     verify: False
   ganache-local:
@@ -17,6 +18,6 @@ networks:
     verify: True
   rinkeby:
     verify: True
-    
+
 wallets:
   from_key: ${PRIVATE_KEY}
