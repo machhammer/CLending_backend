@@ -3,6 +3,7 @@
 pragma solidity ^0.8.10;
 
 struct Deposit {
+    bytes32 key;
     address depositor;
     uint256 amount;
     uint256 timestamp;
@@ -21,7 +22,7 @@ contract CDeposit {
 
     function addDeposit(uint duration_in_month) external payable {
         bytes32 _key = keccak256(abi.encode(msg.sender, block.timestamp, sizeDeposit()));
-        Deposit memory _deposit = Deposit(msg.sender, msg.value, block.timestamp, duration_in_month);
+        Deposit memory _deposit = Deposit(_key, msg.sender, msg.value, block.timestamp, duration_in_month);
         map[_key] = _deposit;
         keyList.push(_key);
         bool found = false;
@@ -102,6 +103,15 @@ contract CDeposit {
         return _deposits;
     }
 
+    function getAllDeposits() public view returns (Deposit[] memory) {
+        
+        Deposit[] memory _deposits = new Deposit[](keyList.length);
+
+        for (uint i = 0; i < keyList.length; i++) {
+            _deposits[i] = map[keyList[i]];
+        }
+        return _deposits;
+    }
     
 
 }
