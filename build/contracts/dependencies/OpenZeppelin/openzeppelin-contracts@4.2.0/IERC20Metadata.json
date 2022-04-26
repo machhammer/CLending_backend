@@ -498,7 +498,7 @@
       "enabled": true,
       "runs": 200
     },
-    "version": "0.8.12+commit.f00d7308"
+    "version": "0.8.11+commit.d7f03943"
   },
   "contractName": "IERC20Metadata",
   "coverageMap": {
