@@ -35,9 +35,9 @@ def executes_test():
     account5 = getAccount(5)
     cm = CLendingManager[-1]
  
-    cm.addDeposit(3, {"from": account1, "value": Web3.toWei(0.01, "ether")})
-    cm.addDeposit(3, {"from": account2, "value": Web3.toWei(0.02, "ether")})
-    cm.addDeposit(3, {"from": account1, "value": Web3.toWei(0.03, "ether")})
+    cm.addDeposit(0, {"from": account1, "value": Web3.toWei(0.01, "ether")})
+    cm.addDeposit(1, {"from": account2, "value": Web3.toWei(0.02, "ether")})
+    cm.addDeposit(2, {"from": account1, "value": Web3.toWei(0.03, "ether")})
     cm.addDeposit(3, {"from": account3, "value": Web3.toWei(0.04, "ether")})
     
     
