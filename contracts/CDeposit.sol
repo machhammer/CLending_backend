@@ -8,7 +8,7 @@ struct Deposit {
     uint256 amount;
     uint256 timestamp;
     uint duration_in_days;
-    bool isValid;
+    bool expired;
 }
 
 
@@ -60,21 +60,42 @@ contract CDeposit {
         keyList.pop();
         
         delete map[_key];
-        
     }
     
     function containsDeposit(bytes32 _key) public view returns (bool) {
         return map[_key].timestamp != 0;
     }
     
+    function handbackExpiredDeposits() public {
+        Deposit[] memory _deposits = getAllDeposits();
+        for (uint i = 0; i < _deposits.length; i++) {
+            if (_deposits[i].expired == true) {
+                transferAmount(_deposits[i].depositor, _deposits[i].amount);
+                removeDeposit(_deposits[i].key);
+            }
+        }
+    }
+
+    function handbackDeposit(bytes32 _key) public {
+        Deposit memory _deposit = getDepositByKey(_key);
+        transferAmount(_deposit.depositor, _deposit.amount);
+        removeDeposit(_deposit.key);
+    }
+
+
+    function transferAmount(address receiver, uint256 amount) internal {
+        payable(receiver).transfer(amount);
+    }
+
+
     function getDepositByKey(bytes32 _key) public view returns (Deposit memory) {
         Deposit memory _deposit = map[_key];
-        bool _isValid = true;
-        if (block.timestamp < _deposit.timestamp + _deposit.duration_in_days * 60 * 60 * 24)
-            _isValid = false;
+        bool _expired = false;
+        if (block.timestamp >= _deposit.timestamp + _deposit.duration_in_days * 60 * 60 * 24)
+            _expired = true;
         else
-            _isValid = true;
-        _deposit.isValid = _isValid;
+            _expired = false;
+        _deposit.expired = _expired;
         return _deposit;
     }
 

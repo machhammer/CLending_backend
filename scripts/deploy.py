@@ -37,7 +37,7 @@ def executes_test():
  
     cm.addDeposit(0, {"from": account1, "value": Web3.toWei(0.01, "ether")})
     cm.addDeposit(1, {"from": account2, "value": Web3.toWei(0.02, "ether")})
-    cm.addDeposit(2, {"from": account1, "value": Web3.toWei(0.03, "ether")})
+    cm.addDeposit(2, {"from": account2, "value": Web3.toWei(0.03, "ether")})
     cm.addDeposit(3, {"from": account3, "value": Web3.toWei(0.04, "ether")})
     
     
