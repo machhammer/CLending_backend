@@ -82,12 +82,10 @@ contract CDeposit {
         removeDeposit(_deposit.key);
     }
 
-
     function transferAmount(address receiver, uint256 amount) internal {
         payable(receiver).transfer(amount);
     }
-
-
+    
     function getDepositByKey(bytes32 _key) public view returns (Deposit memory) {
         Deposit memory _deposit = map[_key];
         bool _expired = false;
@@ -102,7 +100,7 @@ contract CDeposit {
     function sizeDeposit() public view returns (uint) {
         return uint(keyList.length);
     }
-    
+
     function getDepositKeys() public view returns (bytes32[] memory) {
         return keyList;
     }
@@ -142,5 +140,4 @@ contract CDeposit {
         return _deposits;
     }
     
-
 }
