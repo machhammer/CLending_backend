@@ -2,6 +2,7 @@ from brownie import CLendingManager, accounts, network, config
 from web3 import Web3
 import shutil
 import sys
+import os
 
 LOCAL_BLOCKCHAIN_ENVIRONMENTS = ["ganache-local", "development"]
 
@@ -16,6 +17,11 @@ def getAccount(id):
 def deploy_all():
     owner_account = getAccount(0)
     CLendingManager.deploy({"from": owner_account})
+
+    directory = "/Users/machhammer/Projekte/CLending/frontend/src/components/json"
+
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
     shutil.copyfile(
         "/Users/machhammer/Projekte/CLending/backend/build/deployments/map.json",
