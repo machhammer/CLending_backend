@@ -35,19 +35,20 @@ def executes_test():
     account5 = getAccount(5)
     cm = CLendingManager[-1]
  
-    cm.addElement("Deposit", 0, {"from": account1, "value": Web3.toWei(0.01, "ether")})
-    cm.addElement("Deposit", 1, {"from": account2, "value": Web3.toWei(0.02, "ether")})
-    cm.addElement("Deposit", 2, {"from": account2, "value": Web3.toWei(0.03, "ether")})
-    cm.addElement("Deposit", 3, {"from": account3, "value": Web3.toWei(0.04, "ether")})
+    cm.addElement(1, 0, {"from": account1, "value": Web3.toWei(0.01, "ether")})
+    cm.addElement(1, 1, {"from": account2, "value": Web3.toWei(0.02, "ether")})
+    cm.addElement(1, 2, {"from": account2, "value": Web3.toWei(0.03, "ether")})
+    cm.addElement(1, 3, {"from": account3, "value": Web3.toWei(0.04, "ether")})
     
+    cm.addElement(2, 3, {"from": account3, "value": Web3.toWei(0.04, "ether")})
     
-    print("*********************************************************")
+    print("**************************")
+    elements = cm.getElementByElementTypeAndAddress(2, account3)
+    for e in elements:
+        print(e)
 
-    addresses = cm.getAllElements()
-    print(addresses)
-
-    for a in addresses:
-        print("Deposit: ", a)
+    print("**************************")
+    print(cm.borrow(Web3.toWei(0.04, "ether"), {"from": account3}))
 
 
 def deploy_and_execute():

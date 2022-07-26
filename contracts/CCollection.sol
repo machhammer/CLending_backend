@@ -4,7 +4,7 @@ pragma solidity ^0.8.10;
 
 struct Element {
     bytes32 key;
-    bytes32 element_type;
+    uint element_type;
     address participant;
     uint256 amount;
     uint    duration_in_days;
@@ -13,17 +13,16 @@ struct Element {
 }
 
 
-contract CElement {
+contract CCollection {
 
     mapping(bytes32 => Element) internal map;
     
     bytes32[] internal keyList;
     address[] internal addressList;
 
-    event Debug (uint);
 
-    function addElement(bytes32 element_type, uint duration_in_days) external payable {
-        bytes32 _key = keccak256(abi.encode(msg.sender, block.timestamp, sizeElement()));
+    function addElement(uint element_type, uint duration_in_days) public payable {
+        bytes32 _key = keccak256(abi.encode(msg.sender, block.timestamp, sizeCollection()));
         Element memory _element = Element(_key, element_type, msg.sender, msg.value, duration_in_days, block.timestamp, false);
         map[_key] = _element;
         keyList.push(_key);
@@ -98,7 +97,7 @@ contract CElement {
         return _element;
     }
 
-    function sizeElement() public view returns (uint) {
+    function sizeCollection() public view returns (uint) {
         return uint(keyList.length);
     }
 
@@ -124,6 +123,48 @@ contract CElement {
 
         for (uint i = 0; i < keyList.length; i++) {
             if (map[keyList[i]].participant == _address) {
+                _elements[j] = getElementByKey(keyList[i]);
+                j++;
+            }
+        }
+        return _elements;
+    }
+
+    function getElementByElementType(uint _elementType) public view returns (Element[] memory) {
+        uint256 _resultCount;
+
+        for (uint i = 0; i < keyList.length; i++) {
+            if (map[keyList[i]].element_type == _elementType) {
+                _resultCount++;
+            }
+        }
+        
+        Element[] memory _elements = new Element[](_resultCount);
+        uint256 j;
+
+        for (uint i = 0; i < keyList.length; i++) {
+            if (map[keyList[i]].element_type == _elementType) {
+                _elements[j] = getElementByKey(keyList[i]);
+                j++;
+            }
+        }
+        return _elements;
+    }
+
+    function getElementByElementTypeAndAddress(uint _elementType, address _address) public view returns (Element[] memory) {
+        uint256 _resultCount;
+
+        for (uint i = 0; i < keyList.length; i++) {
+            if (map[keyList[i]].element_type == _elementType && map[keyList[i]].participant == _address) {
+                _resultCount++;
+            }
+        }
+        
+        Element[] memory _elements = new Element[](_resultCount);
+        uint256 j;
+
+        for (uint i = 0; i < keyList.length; i++) {
+            if (map[keyList[i]].element_type == _elementType && map[keyList[i]].participant == _address) {
                 _elements[j] = getElementByKey(keyList[i]);
                 j++;
             }
