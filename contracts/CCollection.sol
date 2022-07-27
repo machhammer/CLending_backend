@@ -2,6 +2,9 @@
 
 pragma solidity ^0.8.10;
 
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+
 struct Element {
     bytes32 key;
     uint element_type;
@@ -13,7 +16,7 @@ struct Element {
 }
 
 
-contract CCollection {
+contract CCollection is Ownable{
 
     mapping(bytes32 => Element) internal map;
     
@@ -21,7 +24,7 @@ contract CCollection {
     address[] internal addressList;
 
 
-    function addElement(uint element_type, uint duration_in_days) public payable {
+    function addElement(uint element_type, uint duration_in_days) internal {
         bytes32 _key = keccak256(abi.encode(msg.sender, block.timestamp, sizeCollection()));
         Element memory _element = Element(_key, element_type, msg.sender, msg.value, duration_in_days, block.timestamp, false);
         map[_key] = _element;
@@ -35,7 +38,7 @@ contract CCollection {
         if (found==false) addressList.push(msg.sender);
     }
 
-    function removeElement(bytes32 _key) public  {
+    function removeElement(bytes32 _key) internal  {
         address _participant = map[_key].participant;
 
         uint _count = 0;
@@ -66,7 +69,7 @@ contract CCollection {
         return map[_key].timestamp != 0;
     }
     
-    function handbackExpiredElements() public {
+    function handbackExpiredElements() internal {
         Element[] memory _elements = getAllElements();
         for (uint i = 0; i < _elements.length; i++) {
             if (_elements[i].expired == true) {
@@ -76,7 +79,7 @@ contract CCollection {
         }
     }
 
-    function handbackElement(bytes32 _key) public {
+    function handbackElement(bytes32 _key) internal {
         Element memory _element = getElementByKey(_key);
         transferAmount(_element.participant, _element.amount);
         removeElement(_element.key);
@@ -86,7 +89,7 @@ contract CCollection {
         payable(receiver).transfer(amount);
     }
     
-    function getElementByKey(bytes32 _key) public view returns (Element memory) {
+    function getElementByKey(bytes32 _key) internal view returns (Element memory) {
         Element memory _element = map[_key];
         bool _expired = false;
         if (block.timestamp >= _element.timestamp + _element.duration_in_days * 60 * 60 * 24)

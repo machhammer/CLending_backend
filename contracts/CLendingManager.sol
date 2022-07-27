@@ -11,6 +11,8 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract CLendingManager is Ownable, CCollection {
 
     event Debug (uint256 info);
+    event Debug2 (address info);
+    
 
     function getOwner() external view returns (address)  {
         return owner();
@@ -19,17 +21,30 @@ contract CLendingManager is Ownable, CCollection {
     function getBalance() external view returns (uint256) {
         return address(this).balance;
     }
-    
-   function borrow(uint256) external view returns (uint256) {
+
+    function stake(uint duration_in_days) external payable {
+        addElement(1, duration_in_days);
+    }
+
+    function collateral(uint duration_in_days) external payable {
+        addElement(2, duration_in_days);
+    }
+
+    function borrow(uint256 amount, address payable borrower) external {
         uint256 _sum_collaterals;
-        Element[] memory collaterals = getElementByElementTypeAndAddress(2, msg.sender);
+        Element[] memory collaterals = getElementByElementTypeAndAddress(2, borrower);
 
         for (uint i = 0; i < collaterals.length; i++) {
             _sum_collaterals += collaterals[i].amount;
         }
         
-        return _sum_collaterals;
+        require(
+            _sum_collaterals >= amount,
+            "Not enough collateral."
+        );
+
+        addElement(3, 10);
+        borrower.transfer(amount);
     }
- 
 
 }
