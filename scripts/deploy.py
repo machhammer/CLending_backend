@@ -58,13 +58,13 @@ def executes_test():
     for e in elements:
         print(e)
 
-    print("**************************")
+    print("************************** Borrow 1")
     tx = cm.borrow(Web3.toWei(0.4, "ether"), account3, {"from": account3})
 
-    print("**************************")
-    elements = cm.getAllElements()
-    for e in elements:
-        print(e)
+    cm.collateral(3, {"from": account3, "value": Web3.toWei(0.4, "ether")})
+
+    print("************************** Borrow 2")
+    tx = cm.borrow(Web3.toWei(0.3, "ether"), account3, {"from": account3})
 
 def deploy_and_execute():
     deploy_all()

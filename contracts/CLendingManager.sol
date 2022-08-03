@@ -38,8 +38,15 @@ contract CLendingManager is Ownable, CCollection {
             _sum_collaterals += collaterals[i].amount;
         }
         
+        uint256 _sum_borrowings;
+        Element[] memory borrowings = getElementByElementTypeAndAddress(3, borrower);
+
+        for (uint i = 0; i < borrowings.length; i++) {
+            _sum_borrowings += borrowings[i].amount;
+        }
+
         require(
-            _sum_collaterals >= amount,
+            _sum_collaterals >= _sum_borrowings + amount,
             "Not enough collateral."
         );
 
