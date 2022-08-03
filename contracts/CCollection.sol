@@ -24,9 +24,15 @@ contract CCollection is Ownable{
     address[] internal addressList;
 
 
-    function addElement(uint element_type, uint duration_in_days) internal {
+    function addElement(uint element_type, uint duration_in_days, uint256 amount) internal {
         bytes32 _key = keccak256(abi.encode(msg.sender, block.timestamp, sizeCollection()));
-        Element memory _element = Element(_key, element_type, msg.sender, msg.value, duration_in_days, block.timestamp, false);
+        uint256 _value = 0;
+        if (amount == 0) {
+            _value = msg.value;
+        } else {
+            _value = amount;
+        }
+        Element memory _element = Element(_key, element_type, msg.sender, _value, duration_in_days, block.timestamp, false);
         map[_key] = _element;
         keyList.push(_key);
         bool found = false;

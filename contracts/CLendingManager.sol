@@ -23,11 +23,11 @@ contract CLendingManager is Ownable, CCollection {
     }
 
     function stake(uint duration_in_days) external payable {
-        addElement(1, duration_in_days);
+        addElement(1, duration_in_days, 0);
     }
 
     function collateral(uint duration_in_days) external payable {
-        addElement(2, duration_in_days);
+        addElement(2, duration_in_days, 0);
     }
 
     function borrow(uint256 amount, address payable borrower) external {
@@ -50,7 +50,7 @@ contract CLendingManager is Ownable, CCollection {
             "Not enough collateral."
         );
 
-        addElement(3, 10);
+        addElement(3, 10, amount);
         borrower.transfer(amount);
     }
 

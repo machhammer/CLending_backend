@@ -43,11 +43,11 @@ def executes_test():
     cm = CLendingManager[-1]
  
     cm.stake(0, {"from": account1, "value": Web3.toWei(0.01, "ether")})
-    cm.stake(1, {"from": account2, "value": Web3.toWei(0.02, "ether")})
+    cm.stake(1, {"from": account2, "value": Web3.toWei(0.01, "ether")})
     cm.stake(2, {"from": account2, "value": Web3.toWei(0.03, "ether")})
     cm.stake(3, {"from": account3, "value": Web3.toWei(0.04, "ether")})
     
-    cm.collateral(3, {"from": account3, "value": Web3.toWei(0.4, "ether")})
+    cm.collateral(1, {"from": account1, "value": Web3.toWei(0.4, "ether")})
     
     print("Owner: ", cm.getOwner())
 
@@ -59,7 +59,7 @@ def executes_test():
         print(e)
 
     print("************************** Borrow 1")
-    tx = cm.borrow(Web3.toWei(0.4, "ether"), account3, {"from": account3})
+    tx = cm.borrow(Web3.toWei(0.4, "ether"), account1, {"from": account1})
 
     cm.collateral(3, {"from": account3, "value": Web3.toWei(0.4, "ether")})
 
